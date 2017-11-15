@@ -56,7 +56,7 @@ public class BusTypeController {
    public ResultMessage modify(BusTypeModel busType) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
-	   busTypeService.add(busType);
+	   busTypeService.modify(busType);
 	   result.setResult("Y");
 	   result.setMessage("修改车辆类型成功");
 	   return result;
@@ -73,7 +73,7 @@ public class BusTypeController {
    public ResultMessage delete(BusTypeModel busType) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
-	   busTypeService.add(busType);
+	   busTypeService.delete(busType);
 	   result.setResult("Y");
 	   result.setMessage("删除车辆类型成功");
 	   return result;

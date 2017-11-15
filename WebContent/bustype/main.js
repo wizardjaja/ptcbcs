@@ -111,7 +111,8 @@ $(function(){
 					}*/
 					//取得指定的用户
 					$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data1){
-						$("input[name='bustypeName']").val(data1.typeName);
+						$("input[name='typeNo']").val(data1.typeNo);
+						$("input[name='typeName']").val(data1.typeName);
 					});
 					
 				
@@ -153,17 +154,16 @@ $(function(){
 			BootstrapDialog.alert({title:"提示",message:"请选择要删除的车辆类型"});
 		}
 		else{
-			$.getJSON("user/checkcandelete.mvc",{typeNo:typeNo},function(data){
+			$.getJSON("bustype/checkcandelete.mvc",{typeNo:typeNo},function(data){
 				if(data.result=="Y"){
-					
 					BootstrapDialog.confirm({
 						title:"删除确认",
 						message:"您确认要删除此车辆类型么?",
 						callback:function(result){
 							if(result){
-								$.post("bustype/delete.mvc",{userid:userid},function(data){
+								$.post("bustype/delete.mvc",{typeNo:typeNo},function(data){
 									if(data.result=="Y"){
-										userid=null;
+										typeNo=null;
 										 $("#bustypeGrid").trigger("reloadGrid");
 									}
 									BootstrapDialog.alert({title:"提示",message:data.message});
@@ -191,9 +191,8 @@ $(function(){
 			$("#modelbody").load("bustype/view.html",function(){
 				
 				$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data1){
-					alert(data1);
 					if(data1!=null){
-						$("div#typeNo").html(data1.typeNo);
+						$("div#typeName").html(data1.typeName);
 					}
 				});
 				
@@ -205,231 +204,38 @@ $(function(){
 			$('#bustypeModal').modal("show");
 		}
 	});
+	
+	//点击导入处理
+	$("a#bustypeImportLink").on("click",function(){
+		$("#ModalLabel").html("导入车辆类型");
+		$("#modelbody").load("bustype/import.html",function(){
+			$("input[type='button'][value='取消']").on("click",function(){
+				 $('#bustypeModal').modal("hide");
+			});
+			
+			$("form#bustypeImportForm").ajaxForm(function(data){
+				if(data.result=="Y"){
+					 $("#bustypeGrid").trigger("reloadGrid");
+				}
+				BootstrapDialog.alert({title:"提示",message:data.message});
+				$('#bustypeModal').modal("hide");
+			});
+		});
+		$("div.modal-dialog").css("width","600px");
+		$('#bustypeModal').modal("show");
+	});
+	
+	//点击导出处理
+	$("a#bustypeExportLink").on("click",function(){
+		$("#ModalLabel").html("导出车辆类型");
+		$("#modelbody").load("bustype/export.html",function(){
+			$("input[type='button'][value='关闭']").on("click",function(){
+				 $('#bustypeModal').modal("hide");
+			});
+		});
+		$("div.modal-dialog").css("width","600px");
+		$('#bustypeModal').modal("show");
+	});
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//$(document).ready(function(){
-//	var count = 0;
-//	var pageCount = 0;
-//	var rows=3;
-//	var page=1;
-//	var userid = 0;
-//	
-//	function getUserInfoList(){
-//		$.get("UserInfo/list/page.mvc", {rows:rows,page:page}, function(data){
-//			count = data.count;
-//			pageCount = data.pageCount;
-//			$("div#count").html("个数："+count);  //分页
-//			$("div#pagecount").html("页数:"+page+"/"+pageCount);  //分页
-//			var list = data.list;
-//			if(list != null && list.length>0){
-//				$("table#userinfotable tbody").html("");
-//				for(var i=0; i<list.length; i++){
-//					$("table#userinfotable tbody").append("<tr><td>"+list[i].userid+"</td><td>"+list[i].username+"</td><td>"+list[i].password+"</td><td>"+list[i].status+"</td></tr>")
-//				}
-//				$("table#userinfotable tbody tr").on("click", function(){
-//					userid = parseInt($(this).find("td:first").html());
-//					$("table#userinfotable tbody tr").css("background-color", "#EEE");
-//					$(this).css("background-color", "orange");
-//				});
-//			}
-//		});
-//	}
-//	
-//	//分页
-//	$("ul#pagenav li a").on("click", function(event){
-//		var href = $(this).attr("href");
-//		if(href == "first"){
-//			page = 1;
-//		}else if(href == "previous"){
-//			if(page > 1){
-//				page=page-1;
-//			}else{
-//				page = pageCount;
-//			}
-//		}else if(href == "next"){
-//			if(page < pageCount){
-//				page=page+1;
-//			}else{
-//				page = pageCount;
-//			}
-//		}else{
-//			page = pageCount;
-//		}
-//		getUserInfoList();
-//		event.preventDefault();
-//	});
-//	
-//	//增加系统管理员
-//	$("a#userInfoAddLink").on("click", function(){
-//		$("#ModalLabel").html("增加系统管理员");
-//		$("#modelbody").load("UserInfo/add.html", function(){
-//			$("button[type='reset']").on("click", function(){
-//				$('#userInfoModal').modal("hide");
-//			})
-//			$("button#userInfoAddSubmit").on("click", function(){
-//				var userid = $("input[name='userid']").val();
-//				var username = $("input[name='username']").val();
-//				var password = $("input[name='password']").val();
-//				var status = $("input[name='status']").val();
-//				if(userid == null || userid == ''){
-//					$("p#useridmessage").html("帐号不能为空");
-//					$("p#useridmessage").css("color","red");
-//				}
-//				if(username == null || username == ''){
-//					$("p#usernamemessage").html("用户名不能为空");
-//					$("p#usernamemessage").css("color","red");
-//				}
-//				if(password == null || password == ''){
-//					$("p#passwordmessage").html("密码不能为空");
-//					$("p#passwordmessage").css("color","red");
-//				}
-//				if(status == null || status == ''){
-//					$("p#statusmessage").html("用户状态不能为空");
-//					$("p#statusmessage").css("color","red");
-//				}else{
-//					$("p#useridmessage").html("");
-//					$("p#usernamemessage").html("");
-//					$("p#passwordmessage").html("");
-//					$("p#statusmessage").html("");
-//					$.post("UserInfo/add.mvc", {userid:userid, username:username, password:password, status:status}, function(data){
-//						alert(data.message);
-//						getUserInfoList(); //刷新显示列表
-//						$('#userInfoModal').modal("hide");
-//					});
-//				}
-//			});
-//			
-//		});
-//		$("#userInfoModal").modal("show");
-//	});
-//	
-//	//点击修改处理
-//	$("a#userInfoModifyLink").on("click", function(){
-//		if(userid == 0){
-//			BootstrapDialog.alert({title:"提示", message:"请选择要修改的系统管理员"});
-//			//alert("请选择要修改的系统管理员帐号");
-//		}else{
-//			$("#ModalLabel").html("修改系统管理员");
-//			$("#modelbody").load("UserInfo/modify.html", function(){
-//				$.getJSON("UserInfo/get.mvc", {userid:userid}, function(data){
-//					$("input[name='userid']").val(data.userid);
-//					$("input[name='username']").val(data.username);
-//					$("input[name='password']").val(data.password);
-//					$("input[name='status']").val(data.status);
-//				});
-//				
-//				$("button[type='reset']").on("click", function(){
-//					$('#userInfoModal').modal("hide");
-//				});
-//				
-//				$("button#userInfoModifySubmit").on("click", function(){
-//					var userid = $("input[name='userid']").val();
-//					var username = $("input[name='username']").val();
-//					var password = $("input[name='password']").val();
-//					var status = $("input[name='status']").val();
-//					if(userid == null || userid == ''){
-//						$("p#useridmessage").html("帐号不能为空");
-//						$("p#useridmessage").css("color","red");
-//					}
-//					if(username == null || username == ''){
-//						$("p#usernamemessage").html("用户名不能为空");
-//						$("p#usernamemessage").css("color","red");
-//					}
-//					if(password == null || password == ''){
-//						$("p#passwordmessage").html("密码不能为空");
-//						$("p#passwordmessage").css("color","red");
-//					}
-//					if(status == null || status == ''){
-//						$("p#statusmessage").html("用户状态不能为空");
-//						$("p#statusmessage").css("color","red");
-//					}else{
-//						$("p#useridmessage").html("");
-//						$("p#usernamemessage").html("");
-//						$("p#passwordmessage").html("");
-//						$("p#statusmessage").html("");
-//						$.post("UserInfo/modify.mvc", {userid:userid, username:username, password:password, status:status}, function(data){
-//							alert(data.message);
-//							getUserInfoList(); //刷新显示列表
-//							$('#userInfoModal').modal("hide");
-//						});
-//					}
-//				});
-//				
-//			});
-//			$("#userInfoModal").modal("show");
-//		}
-//	});
-//	//点击查看处理
-//	$("a#userInfoViewLink").on("click", function(){
-//		if(userid == 0){
-//			BootstrapDialog.alert({title:"提示", message:"请选择要查看的系统管理员"});
-//			//alert("请选择要查看的系统管理员帐号");
-//		}else{
-//			$("#ModalLabel").html("查看系统管理员");
-//			$("#modelbody").load("UserInfo/view.html", function(){
-//				$.getJSON("UserInfo/get.mvc", {userid:userid}, function(data){
-//					$("input[name='userid']").val(data.userid);
-//					$("input[name='username']").val(data.username);
-//					$("input[name='password']").val(data.password);
-//					$("input[name='status']").val(data.status);
-//				});
-//				$("button[type='reset']").on("click", function(){
-//					$('#userInfoModal').modal("hide");
-//				});
-//			});
-//			$("#userInfoModal").modal("show");
-//		}
-//	});
-//	
-//	//点击删除处理
-//	$("a#userInfoRemoveLink").on("click", function(){
-//		if(userid == 0){
-//			BootstrapDialog.alert({title:"提示", message:"请选择你要删除的系统管理员"});
-//			//alert("请选择你要删除的系统管理员");
-//		}else{
-//			BootstrapDialog.confirm({
-//				title:"删除确认", 
-//				message:"您确认要删除此建筑类型么?", 
-//				callback:function(result){
-//					if(result){
-//						$.post("UserInfo/delete.mvc", {userid:userid}, function(data){
-//							if(data.result == "Y"){
-//								userid = 0;
-//								getUserInfoList(); //刷新显示列表
-//							}else{
-//								BootstrapDialog.alert({title:"提示", message:data.message});
-//							}
-//						});
-//					}
-//				}
-//			});
-//		}
-//	});
-//	getUserInfoList();
-//	
-//	
-//});
 

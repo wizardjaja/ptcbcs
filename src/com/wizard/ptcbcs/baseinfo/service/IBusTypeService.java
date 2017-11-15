@@ -1,5 +1,7 @@
 package com.wizard.ptcbcs.baseinfo.service;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
@@ -75,4 +77,17 @@ public interface IBusTypeService {
 		 * @throws Exception
 		 */
 		public boolean checkNameExist(String typeName) throws Exception;
+		/**
+		 * 从Excel文件导入车辆类型
+		 * @param excelFile excel文件输入流
+		 * @throws Exception 
+		 */
+		public void importFromExcel(InputStream excelFile) throws Exception;
+		/**
+		 * 导出Excel文件
+		 * @param source 模板文件
+		 * @param exportFile 目标文件
+		 * @throws Exception
+		 */
+		public void exportToExcel(File source, File exportFile) throws Exception;
 }

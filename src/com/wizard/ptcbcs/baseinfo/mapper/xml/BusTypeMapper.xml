@@ -40,7 +40,7 @@
 	<select id="select" parameterType="int" resultMap="BusTypeResultMap">
 		<!-- select a.*,b.* from Area a left outer join Building b on a.AREANO=b.AreaNo 
 		where a.AREANO=#{areaNo} -->
-		select * from BusType
+		select * from BusType where TYPENO=#{typeNo}
 	</select>
 	
 	
