@@ -1,9 +1,17 @@
 package com.wizard.ptcbcs.baseinfo.service.impl;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.wizard.ptcbcs.baseinfo.mapper.IBusTypeMapper;
@@ -89,58 +97,54 @@ public class BusTypeServiceImpl implements IBusTypeService {
 	@Override
 	public void importFromExcel(InputStream excelFile) throws Exception {
 		//打开上传的excel文件
-				Workbook wb = WorkbookFactory.create(excelFile);
-				//取得第1个sheet
-				Sheet sheet=wb.getSheetAt(0);
-				//取得第1行
-				Row row0=sheet.getRow(0);
-				for (Row row : sheet) {
-					if(row.getRowNum()!=0) {
-						Cell c0 = row.getCell(0);
-						int homeFeeNo = (int) c0.getNumericCellValue();
-						System.out.println(homeFeeNo);
-						Cell c1 = row.getCell(1);
-						int payTypes = (int) c1.getNumericCellValue();
-						System.out.println(payTypes);
-						Cell c2 = row.getCell(2);
-						double payAmount = c2.getNumericCellValue();
-						System.out.println(payAmount);
-						Cell c3 = row.getCell(3);
-						Date payDate = c3.getDateCellValue();
-						System.out.println(c3.getDateCellValue());
-						Cell c4 = row.getCell(4);
-						String payPerson = c4.getStringCellValue();
-						System.out.println("4");
-						Cell c5 = row.getCell(5);
-						String mobile = c5.getStringCellValue();				
-						Cell c6 = row.getCell(6);
-						String invoiceCode = c6.getStringCellValue();
-						Cell c7 = row.getCell(7);
-						String payNoteCode = c7.getStringCellValue();
-						Cell c8 = row.getCell(8);
-						String payDesc = c8.getStringCellValue();
-						HomeCustomerFeePayRecordModel hcfpr = new HomeCustomerFeePayRecordModel();
-						hcfpr.setHomeFeeNo(homeFeeNo);
-						PayTypeModel payType = new PayTypeModel();
-						payType.setNo(payTypes);
-						hcfpr.setPayType(payType);
-						hcfpr.setPayAmount(payAmount);
-						hcfpr.setPayDate(payDate);
-						hcfpr.setPayPerson(payPerson);
-						hcfpr.setMobile(mobile);
-						hcfpr.setInvoiceCode(invoiceCode);
-						hcfpr.setPayNoteCode(payNoteCode);
-						hcfpr.setPayDesc(payDesc);
-						this.add(hcfpr);
-					}
-				}
+		Workbook wb = WorkbookFactory.create(excelFile);
+		//取得第1个sheet
+		Sheet sheet=wb.getSheetAt(0);
+		//取得第1行
+		Row row0=sheet.getRow(0);
+		for (Row row : sheet) {
+			if(row.getRowNum()!=0) {
+				Cell c0 = row.getCell(0);
+				int typeNo = (int) c0.getNumericCellValue();
+				System.out.println(typeNo);
+				Cell c1 = row.getCell(1);
+				String typeName = c1.getStringCellValue();
+				System.out.println("1");
+				BusTypeModel busType = new BusTypeModel();
+				busType.setTypeNo(typeNo);
+				busType.setTypeName(typeName);
+				this.add(busType);
+			}
+		}
 		
 	}
 
 	@Override
 	public void exportToExcel(File source, File exportFile) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+		//打开excel模板文件
+		//Workbook wb = WorkbookFactory.create(source);
+		OPCPackage pkg = OPCPackage.open(source);
+		XSSFWorkbook wb = new XSSFWorkbook(pkg);
+		//取得第一个sheet
+		Sheet sheet = wb.getSheetAt(0);
+		//取得所有的车辆类型列表
+		List<BusTypeModel> list = busTypeMapper.selectListByAll();
+		for (BusTypeModel busType : list) {
+			System.out.println(busType);
+		}
+		int i = 1;
+		for(BusTypeModel busType:list){
+			Row row = sheet.createRow(i);
+			Cell c0 = row.createCell(0);
+			c0.setCellValue(busType.getTypeNo());
+			Cell c1 = row.createCell(1);
+			c1.setCellValue(busType.getTypeName());
+			i++;
+		}
+		FileOutputStream fos = new FileOutputStream(exportFile);
+		wb.write(fos);
+		fos.close();
+		wb.close();
+  	}
 
 }
