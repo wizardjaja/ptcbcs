@@ -104,7 +104,7 @@ public class BusTypeServiceImpl implements IBusTypeService {
 		Row row0=sheet.getRow(0);
 		for (Row row : sheet) {
 			if(row.getRowNum()!=0) {
-				Cell c0 = row.getCell(1);
+				Cell c0 = row.getCell(0);
 				String typeName = c0.getStringCellValue();
 				System.out.println("1");
 				BusTypeModel busType = new BusTypeModel();
