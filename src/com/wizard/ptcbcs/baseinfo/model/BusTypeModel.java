@@ -3,13 +3,19 @@ package com.wizard.ptcbcs.baseinfo.model;
 import org.apache.ibatis.type.Alias;
 
 /**
- * 车辆类型
+ * 车辆类型类
  * @author wizard
  *
  */
 @Alias("BusType")
 public class BusTypeModel {
+	/**
+	 * 车辆类型编号
+	 */
 	private int typeNo;
+	/**
+	 * 车辆类型名称
+	 */
 	private String typeName;
 	/**
 	 * 得到并返回车辆类型编号

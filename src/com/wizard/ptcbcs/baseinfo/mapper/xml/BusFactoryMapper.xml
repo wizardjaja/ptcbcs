@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wizard.ptcbcs.baseinfo.mapper.IBusTypeMapper">
+
+	<resultMap id="BusTypeResultMap" type="BusType" >
+		<id property="typeNo" column="TYPENO" />
+		<result property="typeName" column="TYPENAME"/>
+	</resultMap>
+	
+	<!-- <resultMap id="AreaWithCollectionResultMap" type="Area" extends="AreaResultMap" >
+		内嵌式Select方式
+		<collection property="buildings" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByArea"></collection>
+		 
+		 内嵌式ResutMap 
+		 <collection property="buildings" resultMap="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.BuildingResultMap">
+		 
+		 </collection>
+		
+	</resultMap> -->
+	
+	<insert id="insert" parameterType="BusType">
+		<selectKey keyProperty="typeNo" resultType="int" order="BEFORE">
+			select SQ_BUSTYPE.nextval from dual
+		</selectKey>
+		INSERT INTO BusType(TYPENO,TYPENAME) 
+		VALUES(#{typeNo},#{typeName})
+	</insert>
+	
+	<update id="update" parameterType="BusType">
+		update BusType set TYPENAME=#{typeName}
+		where TYPENO=#{typeNo} 
+	</update>
+	
+	<delete id="delete" parameterType="BusType">
+		delete from BusType where TYPENO=#{typeNo} 
+	</delete>
+	
+	<select id="select" parameterType="int" resultMap="BusTypeResultMap">
+		<!-- select a.*,b.* from Area a left outer join Building b on a.AREANO=b.AreaNo 
+		where a.AREANO=#{areaNo} -->
+		select * from BusType where TYPENO=#{typeNo}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="BusTypeResultMap">
+		select * from BusType
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="BusTypeResultMap">
+		select * from BusType
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(*) from BusType
+	</select>
+	
+	
+	
+
+
+</mapper>
+
