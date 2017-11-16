@@ -104,14 +104,10 @@ public class BusTypeServiceImpl implements IBusTypeService {
 		Row row0=sheet.getRow(0);
 		for (Row row : sheet) {
 			if(row.getRowNum()!=0) {
-				Cell c0 = row.getCell(0);
-				int typeNo = (int) c0.getNumericCellValue();
-				System.out.println(typeNo);
-				Cell c1 = row.getCell(1);
-				String typeName = c1.getStringCellValue();
+				Cell c0 = row.getCell(1);
+				String typeName = c0.getStringCellValue();
 				System.out.println("1");
 				BusTypeModel busType = new BusTypeModel();
-				busType.setTypeNo(typeNo);
 				busType.setTypeName(typeName);
 				this.add(busType);
 			}
@@ -136,9 +132,7 @@ public class BusTypeServiceImpl implements IBusTypeService {
 		for(BusTypeModel busType:list){
 			Row row = sheet.createRow(i);
 			Cell c0 = row.createCell(0);
-			c0.setCellValue(busType.getTypeNo());
-			Cell c1 = row.createCell(1);
-			c1.setCellValue(busType.getTypeName());
+			c0.setCellValue(busType.getTypeName());
 			i++;
 		}
 		FileOutputStream fos = new FileOutputStream(exportFile);

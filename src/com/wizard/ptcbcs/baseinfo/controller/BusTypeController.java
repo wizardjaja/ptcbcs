@@ -1,13 +1,24 @@
 package com.wizard.ptcbcs.baseinfo.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 import com.wizard.ptcbcs.baseinfo.service.IBusTypeService;
@@ -119,9 +130,9 @@ public class BusTypeController {
 	   return result;
    }
    	/**
-   	 * 检查此建筑类型能否被删除
+   	 * 检查此车辆类型能否被删除
    	 * @param typeNo 车辆类型编号
-   	 * @return 检查此建筑类型能否被删除
+   	 * @return 检查此车辆类型能否被删除的信息
    	 * @throws Exception
    	 */
 	@RequestMapping(value="/checkcandelete",method=RequestMethod.GET,produces="application/json")
@@ -139,15 +150,64 @@ public class BusTypeController {
 		return result;
 	}
 	/**
-	 * 检查车辆类型名称是否存在
+	 * 检查车辆类型名称是否存在的信息
 	 * @param typeName
-	 * @return
+	 * @return 检车
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/checkNameExist",method=RequestMethod.GET,produces="application/json")
 	public boolean checkNameExist(@RequestParam String typeName) throws Exception{
 		return !busTypeService.checkNameExist(typeName);
 		
+	}
+	/**
+	 * 导入车辆类型的excel文件
+	 * @param importfile excel文件
+	 * @return 检查车辆类型导入是否成功的信息
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/import",method=RequestMethod.POST)
+	public ResultMessage importFromExcel(@RequestPart MultipartFile importfile) throws Exception
+	{
+		 ResultMessage result=new ResultMessage();
+		 if(importfile!=null&&(!importfile.isEmpty())){
+			 busTypeService.importFromExcel(importfile.getInputStream());
+			 result.setResult("Y");
+			 result.setMessage("导入车辆类型成功");
+		 }
+		 else{
+			 result.setResult("N");
+			 result.setMessage("没有上传导入Excel文件");
+		 }
+		 return result;
+		
+	}
+	
+	/**
+	 * 
+	 * @param session 会话
+	 * @return 响应体
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/exporttoexcel", method=RequestMethod.GET)
+	public ResponseEntity<byte[]> exportToExcel(HttpSession session)throws Exception{
+		ServletContext application = session.getServletContext();
+		String sourcepath = application.getRealPath("/excelexport/bustypeexport.xlsx");
+		String exportfilepath = application.getRealPath("/download/exportexcel"+(int)(Math.random()*1000)+".xlsx");
+		busTypeService.exportToExcel(new File(sourcepath), new File(exportfilepath));
+		
+		String mainType="application";
+		String subType="vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+		String fileName=new String("车辆类型导出.xlsx".getBytes("UTF-8"),"iso-8859-1");
+		FileInputStream fis = new FileInputStream(exportfilepath);
+		byte[] data = new byte[fis.available()];
+		fis.read(data, 0, data.length);
+		HttpHeaders headers=new HttpHeaders();
+		headers.setContentDispositionFormData("attachment", fileName);
+		headers.setContentType(new MediaType(mainType,subType));
+		File excelFile = new File(exportfilepath);
+		excelFile.delete();
+		return new ResponseEntity<byte[]>(data,headers,HttpStatus.CREATED);
 	}
    
 }

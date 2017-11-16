@@ -94,5 +94,4 @@
 	<!-- 启动事务切面 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	
 </beans>
