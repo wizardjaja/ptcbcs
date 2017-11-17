@@ -3,7 +3,7 @@ package com.wizard.ptcbcs.baseinfo.model;
 import org.apache.ibatis.type.Alias;
 
 /**
- * 车辆厂家类
+ * 车辆厂家model类
  * @author wizard
  *
  */

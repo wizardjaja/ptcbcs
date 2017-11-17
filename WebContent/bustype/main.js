@@ -19,7 +19,7 @@ $(function(){
 		autowidth:true,
 		height: 370,
 		rowNum: 10,
-		rowList:[1,2,3],
+		rowList:[5,10],
 		jsonReader:{
 			root:"list",
 			page:"page",
