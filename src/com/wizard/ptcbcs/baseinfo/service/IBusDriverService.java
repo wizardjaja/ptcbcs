@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.wizard.ptcbcs.baseinfo.model.BusDriverModel;
-import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 /**
  * 司机service类
  * @author wizard
@@ -36,7 +35,7 @@ public interface IBusDriverService {
 		 * @return 车辆类型对象
 		 * @throws Exception
 		 */
-		public BusDriverModel get(int factoryNo) throws Exception;
+		public BusDriverModel get(String driverID) throws Exception;
 		/**
 		 * 取得所有司机列表
 		 * @return 司机对象集合
@@ -70,14 +69,7 @@ public interface IBusDriverService {
 		 * @return 司机是否可以被删除
 		 * @throws Exception
 		 */
-		public boolean checkCanDelete(int factoryNo) throws Exception;
-		/**
-		 * 检查司机名称是否存在
-		 * @param factoryName 司机名称
-		 * @return 司机名称是否存在
-		 * @throws Exception
-		 */
-		public boolean checkNameExist(String factoryName) throws Exception;
+		public boolean checkCanDelete(String driverID) throws Exception;
 		/**
 		 * 从Excel文件导入司机
 		 * @param excelFile excel文件输入流
