@@ -1,11 +1,8 @@
 package com.wizard.ptcbcs.baseinfo.mapper;
 
 import java.util.List;
-
 import org.apache.ibatis.session.RowBounds;
-
 import com.wizard.ptcbcs.baseinfo.model.BusFactoryModel;
-import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 /**
  * 车辆厂家mapper类
  * @author wizard

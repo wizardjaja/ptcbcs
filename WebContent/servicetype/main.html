@@ -1,0 +1,35 @@
+<script type="text/javascript" src="servicetype/main.js"></script>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-6">维修类型管理</div>
+			<div class="col-md-6 text-right">
+				<a href="#" id="servicetypeAddLink" class="btn btn-default">增加</a>
+				<a href="#" id="servicetypeModifyLink" class="btn btn-default">修改</a>
+				<a href="#" id="servicetypeRemoveLink" class="btn btn-default">删除</a>
+				<a href="#" id="servicetypeViewLink" class="btn btn-default">查看</a>
+				<a href="#" id="servicetypeImportLink" class="btn btn-default">导入文件</a>
+		        <a href="#" id="servicetypeExportLink" class="btn btn-default">导出文件</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table id="servicetypeGrid"></table>
+			<div id="servicetypeGridPager"></div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="servicetypeModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="ModalLabel"></h4>
+			</div>
+			<div class="modal-body" id="modelbody"></div>
+		</div>
+	</div>
+</div>

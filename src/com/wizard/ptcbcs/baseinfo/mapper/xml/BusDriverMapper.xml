@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wizard.ptcbcs.baseinfo.mapper.IBusDriverMapper">
+
+	<resultMap id="BusDriverResultMap" type="BusDriver" >
+		<id property="driverID" column="driverID" />
+		<result property="dname" column="dname"/>
+		<result property="sex" column="sex"/>
+		<result property="age" column="age"/>
+		<result property="birthday" column="birthday"/>
+		<result property="dcard" column="dcard"/>
+		<result property="dcore" column="dcore"/>
+		<result property="joinDate" column="joinDate"/>
+		<result property="leaveDate" column="leaveDate"/>
+		
+	</resultMap>
+	
+	<insert id="insert" parameterType="BusDriver">
+		<selectKey keyProperty="driverID" resultType="String" order="BEFORE">
+			select SQ_BusDriver.nextval from dual
+		</selectKey>
+		INSERT INTO BusDriver(driverID,dname,sex,age,birthday,dcard,dcore,joinDate,leaveDate) 
+		VALUES(#{driverID},#{dname},#{sex},,#{age},,#{birthday},#{dcard},#{dcore},#{joinDate},{leaveDate})
+	</insert>
+	
+	<update id="update" parameterType="BusDriver">
+		update BusDriver set dname=#{dname}, dname=#{dname}, sex=#{sex}, age=#{age}, birthday=#{birthday}, dcard=#{dcard}
+		, dcore=#{dcore}, joinDate=#{joinDate}, leaveDate=#{leaveDate}
+		where driverID=#{driverID} 
+	</update>
+	
+	<delete id="delete" parameterType="BusDriver">
+		delete from BusDriver where driverID=#{driverID} 
+	</delete>
+	
+	<select id="select" parameterType="String" resultMap="BusDriverResultMap">
+		select * from BusDriver where driverID=#{driverID}
+	</select>
+	
+	
+	<select id="selectListByAll" resultMap="BusDriverResultMap">
+		select * from BusDriver
+	</select>
+	
+	<select id="selectListByAllWithPage" resultMap="BusDriverResultMap">
+		select * from BusDriver
+	</select>
+	
+	
+	<select id="selectCountByAll" resultType="int">
+		select count(*) from BusDriver
+	</select>
+	
+	
+	
+
+
+</mapper>
+

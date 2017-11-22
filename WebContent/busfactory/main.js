@@ -1,13 +1,13 @@
 /**
- * 系统操作员管理主JS程序
+ * 车辆厂家管理主JS程序
  */
 /**
- * 系统操作员管理主控制JS
+ * 车辆厂家管理主控制JS
  */
 $(function(){
 	var factoryNo=null;
 	
-	//显示系统操作员表格
+	//显示车辆厂家表格
 	$("#busfactoryGrid").jqGrid({
 		url: 'busfactory/list/page.mvc',
 		datatype: "json",

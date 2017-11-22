@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
-
 import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,58 +14,58 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.wizard.ptcbcs.baseinfo.mapper.IBusFactoryMapper;
-import com.wizard.ptcbcs.baseinfo.model.BusFactoryModel;
-import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
-import com.wizard.ptcbcs.baseinfo.service.IBusFactoryService;
+import com.wizard.ptcbcs.baseinfo.mapper.IServiceTypeMapper;
+import com.wizard.ptcbcs.baseinfo.model.ServiceTypeModel;
+import com.wizard.ptcbcs.baseinfo.service.IServiceTypeService;
 /**
- * 车辆厂家service实现类
+ * 维修类型service实现类
  * @author wizard
  *
  */
 @Service
-public class BusFactoryServiceImpl implements IBusFactoryService {
-	private IBusFactoryMapper busFactoryMapper;
-	@Autowired
-	public void setBusFactoryMapper(IBusFactoryMapper busFactoryMapper) {
-		this.busFactoryMapper = busFactoryMapper;
-	}
+public class ServiceTypeServiceImpl implements IServiceTypeService {
+	private IServiceTypeMapper serviceTypeMapper;
 	
-	@Override
-	public void add(BusFactoryModel busFactory) throws Exception {
-		busFactoryMapper.insert(busFactory);
+	@Autowired
+	public void setServiceTypeMapper(IServiceTypeMapper serviceTypeMapper) {
+		this.serviceTypeMapper = serviceTypeMapper;
 	}
 
 	@Override
-	public void modify(BusFactoryModel busFactory) throws Exception {
+	public void add(ServiceTypeModel serviceType) throws Exception {
+		serviceTypeMapper.insert(serviceType);
+	}
+
+	@Override
+	public void modify(ServiceTypeModel serviceType) throws Exception {
 		// TODO Auto-generated method stub
-		busFactoryMapper.update(busFactory);
+		serviceTypeMapper.update(serviceType);
 	}
 
 	@Override
-	public void delete(BusFactoryModel busFactory) throws Exception {
+	public void delete(ServiceTypeModel serviceType) throws Exception {
 		// TODO Auto-generated method stub
-		busFactoryMapper.delete(busFactory);
+		serviceTypeMapper.delete(serviceType);
 	}
 
 	@Override
-	public BusFactoryModel get(int factoryNo) throws Exception {
-		return busFactoryMapper.select(factoryNo);
+	public ServiceTypeModel get(int typeNo) throws Exception {
+		return serviceTypeMapper.select(typeNo);
 	}
 
 	@Override
-	public List<BusFactoryModel> getListByAll() throws Exception {
-		return busFactoryMapper.selectListByAll();
+	public List<ServiceTypeModel> getListByAll() throws Exception {
+		return serviceTypeMapper.selectListByAll();
 	}
 
 	@Override
-	public List<BusFactoryModel> getListByAllWithPage(int rows, int page) throws Exception {
-		return busFactoryMapper.selectListByAllWithPage(new RowBounds(rows*(page-1), rows));
+	public List<ServiceTypeModel> getListByAllWithPage(int rows, int page) throws Exception {
+		return serviceTypeMapper.selectListByAllWithPage(new RowBounds(rows*(page-1), rows));
 	}
 
 	@Override
 	public int getCountByAll() throws Exception {
-		return busFactoryMapper.selectCountByAll();
+		return serviceTypeMapper.selectCountByAll();
 	}
 
 	@Override
@@ -80,16 +79,16 @@ public class BusFactoryServiceImpl implements IBusFactoryService {
 	}
 
 	@Override
-	public boolean checkCanDelete(int factoryNo) throws Exception {
+	public boolean checkCanDelete(int typeNo) throws Exception {
 		return true;
 	}
 
 	@Override
-	public boolean checkNameExist(String factoryName) throws Exception {
+	public boolean checkNameExist(String typeName) throws Exception {
 		boolean result=false;
-		List<BusFactoryModel> list=this.getListByAll();
-		for(BusFactoryModel busFactory:list){
-			if(busFactory!=null&&busFactory.getFactoryName()!=null&&busFactory.getFactoryName().equals(factoryName)){
+		List<ServiceTypeModel> list=this.getListByAll();
+		for(ServiceTypeModel serviceType:list){
+			if(serviceType!=null&&serviceType.getTypeName()!=null&&serviceType.getTypeName().equals(typeName)){
 				result=true;
 				break;
 			}
@@ -107,21 +106,21 @@ public class BusFactoryServiceImpl implements IBusFactoryService {
 		Row row0=sheet.getRow(0);
 		for (Row row : sheet) {
 			if(row.getRowNum()!=0) {
-				BusFactoryModel busFactory = new BusFactoryModel();
+				ServiceTypeModel serviceType = new ServiceTypeModel();
 				Cell c0 = row.getCell(0);
-				String factoryName = c0.getStringCellValue();
+				String typeName = c0.getStringCellValue();
+				serviceType.setTypeName(typeName);
 				System.out.println("0");
-				busFactory.setFactoryName(factoryName);
 				Cell c1 = row.getCell(1);
 				if(c1!=null) {
-					String factoryDesc = c1.getStringCellValue();
-					busFactory.setFactoryDesc(factoryDesc);
-					System.out.println("1");
-					}else {
-						String factoryDesc = " ";
-						busFactory.setFactoryDesc(factoryDesc);
-					}
-				this.add(busFactory);
+				String typeDesc = c1.getStringCellValue();
+				serviceType.setTypeDesc(typeDesc);
+				System.out.println("1");
+				}else {
+					String typeDesc = " ";
+					serviceType.setTypeDesc(typeDesc);
+				}
+				this.add(serviceType);
 			}
 		}
 	}
@@ -134,18 +133,18 @@ public class BusFactoryServiceImpl implements IBusFactoryService {
 		XSSFWorkbook wb = new XSSFWorkbook(pkg);
 		//取得第一个sheet
 		Sheet sheet = wb.getSheetAt(0);
-		//取得所有的车辆厂家列表
-		List<BusFactoryModel> list = busFactoryMapper.selectListByAll();
-		for (BusFactoryModel busFactoty : list) {
+		//取得所有的维修类型列表
+		List<ServiceTypeModel> list = serviceTypeMapper.selectListByAll();
+		for (ServiceTypeModel busFactoty : list) {
 			System.out.println(busFactoty);
 		}
 		int i = 1;
-		for(BusFactoryModel busFactoty:list){
+		for(ServiceTypeModel busFactoty:list){
 			Row row = sheet.createRow(i);
 			Cell c0 = row.createCell(0);
-			c0.setCellValue(busFactoty.getFactoryName());
+			c0.setCellValue(busFactoty.getTypeName());
 			Cell c1 = row.createCell(1);
-			c1.setCellValue(busFactoty.getFactoryDesc());
+			c1.setCellValue(busFactoty.getTypeDesc());
 			i++;
 		}
 		FileOutputStream fos = new FileOutputStream(exportFile);

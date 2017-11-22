@@ -1,25 +1,26 @@
 /**
- * 车辆类型管理主JS程序
+ * 维修类型管理主JS程序
  */
 /**
- * 车辆类型管理主控制JS
+ * 维修类型管理主控制JS
  */
 $(function(){
 	var typeNo=null;
 	
-	//显示车辆类型表格
-	$("#bustypeGrid").jqGrid({
-		url: 'bustype/list/page.mvc',
+	//显示维修类型表格
+	$("#servicetypeGrid").jqGrid({
+		url: 'servicetype/list/page.mvc',
 		datatype: "json",
 		mtype:"GET",		
 		colModel: [
-			{ label: '车辆类型', name: 'typeName', width: 150 }
+			{ label: '维修类型', name: 'typeName', width: 150 },
+			{ label: '维修描述', name: 'typeDesc', width: 600 },
 		],
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		autowidth:true,
 		height: 370,
 		rowNum: 10,
-		rowList:[5,10],
+		rowList:[5,10,15],
 		jsonReader:{
 			root:"list",
 			page:"page",
@@ -27,7 +28,7 @@ $(function(){
 			records:"count",
 			id:"typeNo"
 		},
-		pager: "#bustypeGridPager",
+		pager: "#servicetypeGridPager",
 		multiselect:false,
 		onSelectRow:function(id){
 			typeNo=id;
@@ -45,9 +46,9 @@ $(function(){
 		}
 	});
 	//点击增加处理
-	$("a#bustypeAddLink").on("click",function(){
-		$("#modelbody").load("bustype/add.html",function(){
-			$("#ModalLabel").html("增加车辆类型");
+	$("a#servicetypeAddLink").on("click",function(){
+		$("#modelbody").load("servicetype/add.html",function(){
+			$("#ModalLabel").html("增加维修类型");
 			//取得系统功能列表
 			/*$.getJSON("function/list/all.mvc",function(funtionList){
 				if(funtionList!=null){
@@ -62,45 +63,45 @@ $(function(){
 				}
 			});*/
 			//验证
-			$("form#bustypeAddForm").validate({
+			$("form#servicetypeAddForm").validate({
 				rules:{
 					typeName:{
 						required:true,
-						remote:"bustype/checkNameExist.mvc"
+						remote:"servicetype/checkNameExist.mvc"
 					}
 				},
 				messages:{
 					typeName:{
-						required:"车辆类型不能为空",
-						remote:"此车辆类型已经存在"
+						required:"维修类型不能为空",
+						remote:"此维修类型已经存在"
 					}
 				}
 				
 			});
 			//拦截用户增加
-			$("form#bustypeAddForm").ajaxForm(function(data){
+			$("form#servicetypeAddForm").ajaxForm(function(data){
 				if(data.result=="Y"){
-					$("#bustypeGrid").trigger("reloadGrid");
+					$("#servicetypeGrid").trigger("reloadGrid");
 				}
 				BootstrapDialog.alert({title:"提示",message:data.message});
-				$('#bustypeModal').modal("hide");
+				$('#servicetypeModal').modal("hide");
 			});
 			//点击取消按钮处理
-			$("button[type='reset']").on("click",function(){
-				$('#bustypeModal').modal("hide");
+			$("input[type='button'][value='取消']").on("click",function(){
+				$('#servicetypeModal').modal("hide");
 			});
 		});
-		$('#bustypeModal').modal("show");
+		$('#servicetypeModal').modal("show");
 		
 	});
 	//点击修改处理
-	$("a#bustypeModifyLink").on("click",function(){
+	$("a#servicetypeModifyLink").on("click",function(){
 		if(typeNo==null){
-			BootstrapDialog.alert({title:"提示",message:"请选择要修改的车辆类型"});
+			BootstrapDialog.alert({title:"提示",message:"请选择要修改的维修类型"});
 		}
 		else{
-			$("#modelbody").load("bustype/modify.html",function(){
-				$("#ModalLabel").html("修改车辆类型");
+			$("#modelbody").load("servicetype/modify.html",function(){
+				$("#ModalLabel").html("修改维修类型");
 				
 				/*//取得系统功能列表
 				$.getJSON("function/list/all.mvc",function(funtionList){
@@ -110,61 +111,65 @@ $(function(){
 						}
 					}*/
 					//取得指定的用户
-					$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data1){
+					$.getJSON("servicetype/get.mvc",{typeNo:typeNo},function(data1){
 						$("input[name='typeNo']").val(data1.typeNo);
 						$("input[name='typeName']").val(data1.typeName);
+						$("textarea[name='typeDesc']").val(data1.typeDesc);
 					});
 					
 				
 				
 				//验证
-				$("form#bustypeModifyForm").validate({
+				$("form#servicetypeModifyForm").validate({
 					rules:{
 						typeName:{
 							required:true,
-							remote:"bustype/checkNameExist.mvc"
+							remote:"servicetype/checkNameExist.mvc"
+						},
+						typeDesc:{
+							required:false
 						}
 					},
 				messages:{
 					typeName:{
-						required:"车辆类型不能为空",
-						remote:"此车辆类型已经存在"
+						required:"维修类型 不能为空",
+						remote:"此维修类型已经存在"
 					}
 				}
 				});
 				//拦截用户修改表单提交
-				$("form#bustypeModifyForm").ajaxForm(function(data){
+				$("form#servicetypeModifyForm").ajaxForm(function(data){
 					if(data.result=="Y"){
-						$("#bustypeGrid").trigger("reloadGrid");
+						$("#servicetypeGrid").trigger("reloadGrid");
 					}
 					BootstrapDialog.alert({title:"提示",message:data.message});
-					$('#bustypeModal').modal("hide");
+					$('#servicetypeModal').modal("hide");
 				});
-				$("button[type='reset']").on("click",function(){
-					$('#bustypeModal').modal("hide");
+				$("input[type='button'][value='取消']").on("click",function(){
+					$('#servicetypeModal').modal("hide");
 				});
 			});
-			$('#bustypeModal').modal("show");
+			$('#servicetypeModal').modal("show");
 		}
 	});
 	
 	//点击删除处理
-	$("a#bustypeRemoveLink").on("click",function(){
+	$("a#servicetypeRemoveLink").on("click",function(){
 		if(typeNo==null){
-			BootstrapDialog.alert({title:"提示",message:"请选择要删除的车辆类型"});
+			BootstrapDialog.alert({title:"提示",message:"请选择要删除的维修类型"});
 		}
 		else{
-			$.getJSON("bustype/checkcandelete.mvc",{typeNo:typeNo},function(data){
+			$.getJSON("servicetype/checkcandelete.mvc",{typeNo:typeNo},function(data){
 				if(data.result=="Y"){
 					BootstrapDialog.confirm({
 						title:"删除确认",
-						message:"您确认要删除此车辆类型么?",
+						message:"您确认要删除此维修类型么?",
 						callback:function(result){
 							if(result){
-								$.post("bustype/delete.mvc",{typeNo:typeNo},function(data){
+								$.post("servicetype/delete.mvc",{typeNo:typeNo},function(data){
 									if(data.result=="Y"){
 										typeNo=null;
-										 $("#bustypeGrid").trigger("reloadGrid");
+										 $("#servicetypeGrid").trigger("reloadGrid");
 									}
 									BootstrapDialog.alert({title:"提示",message:data.message});
 									
@@ -182,59 +187,60 @@ $(function(){
 	});
 	
 	//点击查看处理
-	$("a#bustypeViewLink").on("click",function(){
+	$("a#servicetypeViewLink").on("click",function(){
 		if(typeNo==null){
-			BootstrapDialog.alert({title:"提示",message:"请选择要查看的车辆类型"});
+			BootstrapDialog.alert({title:"提示",message:"请选择要查看的维修类型"});
 		}
 		else{
-			$("#ModalLabel").html("查看车辆类型");
-			$("#modelbody").load("bustype/view.html",function(){
+			$("#ModalLabel").html("查看维修类型");
+			$("#modelbody").load("servicetype/view.html",function(){
 				
-				$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data1){
+				$.getJSON("servicetype/get.mvc",{typeNo:typeNo},function(data1){
 					if(data1!=null){
 						$("div#typeName").html(data1.typeName);
+						$("div#typeDesc").html(data1.typeDesc);
 					}
 				});
 				
-				$("button[type='reset']").on("click",function(){
-					$('#bustypeModal').modal("hide");
+				$("input[type='button'][value='返回']").on("click",function(){
+					$('#servicetypeModal').modal("hide");
 				});
 				
 			});
-			$('#bustypeModal').modal("show");
+			$('#servicetypeModal').modal("show");
 		}
 	});
 	
 	//点击导入处理
-	$("a#bustypeImportLink").on("click",function(){
-		$("#ModalLabel").html("导入车辆类型");
-		$("#modelbody").load("bustype/import.html",function(){
+	$("a#servicetypeImportLink").on("click",function(){
+		$("#ModalLabel").html("导入维修类型");
+		$("#modelbody").load("servicetype/import.html",function(){
 			$("input[type='button'][value='取消']").on("click",function(){
-				 $('#bustypeModal').modal("hide");
+				 $('#servicetypeModal').modal("hide");
 			});
 			
-			$("form#bustypeImportForm").ajaxForm(function(data){
+			$("form#servicetypeImportForm").ajaxForm(function(data){
 				if(data.result=="Y"){
-					 $("#bustypeGrid").trigger("reloadGrid");
+					 $("#servicetypeGrid").trigger("reloadGrid");
 				}
 				BootstrapDialog.alert({title:"提示",message:data.message});
-				$('#bustypeModal').modal("hide");
+				$('#servicetypeModal').modal("hide");
 			});
 		});
 		$("div.modal-dialog").css("width","600px");
-		$('#bustypeModal').modal("show");
+		$('#servicetypeModal').modal("show");
 	});
 	
 	//点击导出处理
-	$("a#bustypeExportLink").on("click",function(){
-		$("#ModalLabel").html("导出车辆类型");
-		$("#modelbody").load("bustype/export.html",function(){
+	$("a#servicetypeExportLink").on("click",function(){
+		$("#ModalLabel").html("导出维修类型");
+		$("#modelbody").load("servicetype/export.html",function(){
 			$("input[type='button'][value='关闭']").on("click",function(){
-				 $('#bustypeModal').modal("hide");
+				 $('#servicetypeModal').modal("hide");
 			});
 		});
 		$("div.modal-dialog").css("width","600px");
-		$('#bustypeModal').modal("show");
+		$('#servicetypeModal').modal("show");
 	});
 });
 
