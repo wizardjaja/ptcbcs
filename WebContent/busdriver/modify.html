@@ -1,0 +1,64 @@
+ <form id="busdriverModifyForm" role="form" class="form-horizontal" action="busdriver/modify.mvc" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="dname">姓名</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="dname" id="dname" />
+            </div>
+            <label class="col-sm-2 control-label" for="sex">性别</label>
+            <div class="col-sm-4">
+            	<input type="text" class="form-control" name="sex" id="sex" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="age">年龄</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="age" id="age" />
+            </div>
+            <label class="col-sm-2 control-label" for="birthday">生日</label>
+            <div class="col-sm-4">
+            	<input type="date" class="form-control" name="birthday" id="birthday" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="dcard">身份证号</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="dcard" id="dcard" />
+            </div>
+            <label class="col-sm-2 control-label" for="dcore">驾照编号</label>
+            <div class="col-sm-4">
+            	<input type="text" class="form-control" name="dcore" id="dcore" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="joinDate">入职时间</label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" name="joinDate" id="joinDate" />
+            </div>
+            <label class="col-sm-2 control-label" for="leaveDate">离职时间</label>
+            <div class="col-sm-4">
+            	<input type="date" class="form-control" name="leaveDate" id="leaveDate" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-4">
+                <input type="hidden" class="form-control" name="driverID" id="driverID" />
+            </div>
+        </div>
+        <div class="form-group">
+        	<div class="col-sm-6">
+                <input type="submit" class="form-control" value="修改" />
+            </div>
+            <div class="col-sm-6">
+                <input type="button" class="form-control" value="取消" />
+            </div>
+        </div> 
+         
+    </fieldset>
+</form>
+

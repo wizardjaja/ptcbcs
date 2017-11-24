@@ -18,6 +18,24 @@ public interface IBusTypeMapper {
 	 */
 	public void insert(BusTypeModel busType) throws Exception;
 	/**
+	 * 插入车辆类型(带照片)
+	 * @param busType 车辆类型对象
+	 * @throws Exception
+	 */
+	public void insertWithPhoto(BusTypeModel busType) throws Exception;
+	/**
+	 * 修改车辆类型,有附件信息处理
+	 * @param busType 车辆类型对象
+	 * @throws Exception
+	 */
+	public void updateWithPhoto(BusTypeModel busType) throws Exception;
+	/**
+	 * 删除车辆类型,有附件信息处理
+	 * @param busType 车辆类型对象
+	 * @throws Exception
+	 */
+	public void updateForDeletePhoto(BusTypeModel busType) throws Exception;
+	/**
 	 * 修改车辆类型
 	 * @param busType 车辆类型对象
 	 * @throws Exception

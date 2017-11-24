@@ -9,6 +9,11 @@
 		<result property="typeName" column="TYPENAME"/>
 	</resultMap>
 	
+	<resultMap id="BusTypeWithPhotoResultMap" type="BusType" extends="BusTypeResultMap" >
+        <result property="photo" column="photo"/>
+        <result property="PHOTOFILENAME" column="photoFileName"/>
+        <result property="PHOTOCONTENTTYPE" column="photoContentType"/>
+     </resultMap>
 	<!-- <resultMap id="AreaWithCollectionResultMap" type="Area" extends="AreaResultMap" >
 		内嵌式Select方式
 		<collection property="buildings" column="AREANO" select="com.neusoft.wuye.baseinfo.mapper.IBuildingMapper.selectListByArea"></collection>
@@ -28,10 +33,26 @@
 		VALUES(#{typeNo},#{typeName})
 	</insert>
 	
+	<insert id="insertWithPhoto" parameterType="BusType">
+      insert into BusType(TYPENO,TYPENAME,photo,PHOTOFILENAME,PHOTOCONTENTTYPE) 
+      values(#{typeNo},#{typeName},#{photo},#{photoFileName},#{photoContentType} )
+  </insert>
+	
 	<update id="update" parameterType="BusType">
 		update BusType set TYPENAME=#{typeName}
 		where TYPENO=#{typeNo} 
 	</update>
+	
+	<update id="updateWithPhoto" parameterType="BusType">
+     update BusType set TYPENAME=#{typeName},
+      Photo=#{photo},PHOTOFILENAME=#{photoFileName},PHOTOCONTENTTYPE=#{photoContentType}
+      where TYPENO=#{typeNo}
+  </update>
+  <!-- 删除车辆类型信息的附件信息 -->
+   <update id="updateForDeletePhoto" parameterType="BusType">
+     update BusType set photo=null,PHOTOFILENAME=null,PHOTOCONTENTTYPE=null
+      where TYPENO=#{typeNo}
+  </update>
 	
 	<delete id="delete" parameterType="BusType">
 		delete from BusType where TYPENO=#{typeNo} 

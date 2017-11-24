@@ -3,23 +3,19 @@ package com.wizard.ptcbcs.baseinfo.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 import com.wizard.ptcbcs.baseinfo.service.IBusTypeService;
 import com.wizard.ptcbcs.result.ResultInfo;
@@ -45,11 +41,23 @@ public class BusTypeController {
     * @throws Exception
     */
    @RequestMapping(value="/add",method=RequestMethod.POST)
-   public ResultMessage add(BusTypeModel busType) throws Exception
+   public ResultMessage add(BusTypeModel busType, @RequestPart(required=false) MultipartFile uploadphoto,HttpSession session) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("增加车辆类型失败");
+	   if(uploadphoto!=null && (!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			ServletContext application=session.getServletContext();
+			
+			String path=application.getRealPath("/upload/"+fileName);
+			uploadphoto.transferTo(new File(path));
+			busType.setPhoto(uploadphoto.getBytes());
+			busType.setPhotoFileName(fileName);
+			busType.setPhotoContentType(contentType);
+			
+		}
 	   busTypeService.add(busType);
 	   result.setResult("Y");
 	   result.setMessage("增加车辆类型成功");
@@ -66,11 +74,41 @@ public class BusTypeController {
  * @throws Exception
  */
 @RequestMapping(value="/modify",method=RequestMethod.POST)
-   public ResultMessage modify(BusTypeModel busType) throws Exception
+   public ResultMessage modify(BusTypeModel busType, @RequestParam String photoOption,@RequestPart(required=false) MultipartFile uploadphoto,HttpSession session) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("修改车辆类型失败");
+	   
+	   if(photoOption.equals("change")){
+			if(uploadphoto!=null&&(!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			ServletContext application=session.getServletContext();
+			
+			String path=application.getRealPath("/upload/"+fileName);
+			uploadphoto.transferTo(new File(path));
+			
+			busType.setPhoto(uploadphoto.getBytes());
+			busType.setPhotoFileName(fileName);
+			busType.setPhotoContentType(contentType);
+			busTypeService.modifyWithPhoto(busType);
+		}
+			else{
+				busTypeService.modify(busType);
+				busTypeService.modifyForDeletePhoto(busType);
+			}
+		}
+		else if(photoOption.equals("keep")){
+			busTypeService.modify(busType);
+		}
+		else{
+			busTypeService.modify(busType);
+			busTypeService.modifyForDeletePhoto(busType);
+		}
+	   
+	   
+	   
 	   busTypeService.modify(busType);
 	   result.setResult("Y");
 	   result.setMessage("修改车辆类型成功");
@@ -166,6 +204,24 @@ public class BusTypeController {
 		return !busTypeService.checkNameExist(typeName);
 		
 	}
+	
+	//下载文件的方法
+ 	@RequestMapping(value="/downphoto",method=RequestMethod.GET)
+ 	public ResponseEntity<byte[]> downloadPhoto(@RequestParam int typeNo) throws Exception
+ 	{
+ 		BusTypeModel busType=busTypeService.get(typeNo);
+ 		String fileName=new String(busType.getPhotoFileName().getBytes("UTF-8"),"iso-8859-1");
+ 		String contentType=busType.getPhotoContentType();
+ 	
+ 		String mainType=contentType.substring(0,contentType.indexOf("/"));
+ 		
+ 		String subType=contentType.substring(contentType.indexOf("/")+1);
+ 
+ 		HttpHeaders headers=new HttpHeaders();
+ 		headers.setContentDispositionFormData("attachment", fileName);
+ 		headers.setContentType(new MediaType(mainType,subType));
+ 		return new ResponseEntity<byte[]>(busType.getPhoto(),headers,HttpStatus.CREATED);
+ 	}
 	/**
 	 * 导入车辆类型的excel文件
 	 * @param importfile excel文件
@@ -208,6 +264,7 @@ public class BusTypeController {
 		FileInputStream fis = new FileInputStream(exportfilepath);
 		byte[] data = new byte[fis.available()];
 		fis.read(data, 0, data.length);
+		fis.close();
 		HttpHeaders headers=new HttpHeaders();
 		headers.setContentDispositionFormData("attachment", fileName);
 		headers.setContentType(new MediaType(mainType,subType));

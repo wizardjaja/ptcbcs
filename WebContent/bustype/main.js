@@ -90,6 +90,7 @@ $(function(){
 				$('#bustypeModal').modal("hide");
 			});
 		});
+		$("div.modal-dialog").css("width","900px");
 		$('#bustypeModal').modal("show");
 		
 	});
@@ -122,13 +123,11 @@ $(function(){
 					rules:{
 						typeName:{
 							required:true,
-							remote:"bustype/checkNameExist.mvc"
 						}
 					},
 				messages:{
 					typeName:{
 						required:"车辆类型不能为空",
-						remote:"此车辆类型已经存在"
 					}
 				}
 				});
@@ -144,6 +143,7 @@ $(function(){
 					$('#bustypeModal').modal("hide");
 				});
 			});
+			$("div.modal-dialog").css("width","900px");
 			$('#bustypeModal').modal("show");
 		}
 	});
@@ -190,9 +190,20 @@ $(function(){
 			$("#ModalLabel").html("查看车辆类型");
 			$("#modelbody").load("bustype/view.html",function(){
 				
-				$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data1){
-					if(data1!=null){
-						$("div#typeName").html(data1.typeName);
+				$.getJSON("bustype/get.mvc",{typeNo:typeNo},function(data){
+					if(data!=null){
+						$("input[name='typeName']").val(data.typeName);
+					}
+					if(data.photoFileName!=null){
+						if(data.photoContentType.indexOf("image")==0){
+							$("div#bustypePhoto").html("<img src='bustype/downphoto.mvc?typeNo="+data.typeNo+"'  width='300'/>");	
+						}
+						else{
+							$("div#bustypePhoto").html("<a href='bustype/downphoto.mvc?typeNo="+data.typeNo+"'>下载</a>");
+						}
+					}
+					else{
+						$("div#bustypePhoto").html("无附件");
 					}
 				});
 				
@@ -201,6 +212,7 @@ $(function(){
 				});
 				
 			});
+			$("div.modal-dialog").css("width","900px");
 			$('#bustypeModal').modal("show");
 		}
 	});

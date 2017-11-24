@@ -32,12 +32,27 @@ public class BusTypeServiceImpl implements IBusTypeService {
 
 	@Override
 	public void add(BusTypeModel busType) throws Exception {
-		busTypeMapper.insert(busType);
+		if(busType.getPhotoFileName()!=null){
+			busTypeMapper.insertWithPhoto(busType);
+		}else{
+			busTypeMapper.insert(busType);
+		}
 	}
 
 	@Override
 	public void modify(BusTypeModel busType) throws Exception {
 		busTypeMapper.update(busType);
+	}
+	
+	@Override
+	public void modifyWithPhoto(BusTypeModel busType) throws Exception {
+		busTypeMapper.updateWithPhoto(busType);
+		
+	}
+
+	@Override
+	public void modifyForDeletePhoto(BusTypeModel busType) throws Exception {
+		busTypeMapper.updateForDeletePhoto(busType);
 	}
 
 	@Override

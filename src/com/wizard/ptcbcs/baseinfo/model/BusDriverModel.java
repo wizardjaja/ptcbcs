@@ -42,7 +42,7 @@ public class BusDriverModel {
 	 * 驾照编号
 	 */
 	private String dcore = null;
-	/**
+	/**ss
 	 * 入职时间
 	 */
 	@DateTimeFormat(pattern="yyyy-MM-dd") 

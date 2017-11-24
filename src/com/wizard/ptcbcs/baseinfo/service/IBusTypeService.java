@@ -24,6 +24,18 @@ public interface IBusTypeService {
 		 */
 		public void modify(BusTypeModel busType) throws Exception;
 		/**
+		 * 修改车辆类型,有附件信息处理
+		 * @param busType 车辆类型对象
+		 * @throws Exception
+		 */
+		public void modifyWithPhoto(BusTypeModel busType) throws Exception;
+		/**
+		 * 删除车辆类型,有附件信息处理
+		 * @param busType 车辆类型对象
+		 * @throws Exception
+		 */
+		public void modifyForDeletePhoto(BusTypeModel busType) throws Exception;
+		/**
 		 * 删除车辆类型
 		 * @param busType 车辆类型对象
 		 * @throws Exception
