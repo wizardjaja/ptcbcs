@@ -41,6 +41,16 @@ public class ServiceTypeServiceImpl implements IServiceTypeService {
 		// TODO Auto-generated method stub
 		serviceTypeMapper.update(serviceType);
 	}
+	@Override
+	public void modifyWithPhoto(ServiceTypeModel serviceType) throws Exception {
+		serviceTypeMapper.updateWithPhoto(serviceType);
+		
+	}
+
+	@Override
+	public void modifyForDeletePhoto(ServiceTypeModel serviceType) throws Exception {
+		serviceTypeMapper.updateForDeletePhoto(serviceType);
+	}
 
 	@Override
 	public void delete(ServiceTypeModel serviceType) throws Exception {

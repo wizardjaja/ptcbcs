@@ -7,27 +7,42 @@
             </div>
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-4">
+                <input type="hidden" class="form-control" name="typeNo" id="typeNo" />
             </div>
         </div>
          <div class="form-group">
             <label class="col-sm-2 control-label" for="payDesc">类型描述</label>
             <div class="col-sm-4">
                 
-				<textarea rows="5" cols="60" name="typeDesc" id="typeDesc"></textarea>
+				<textarea rows="3" cols="150" name="typeDesc" id="typeDesc"></textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label"></label>
+            <label class="col-sm-2 control-label" for="photo">车辆类型附件</label>
             <div class="col-sm-4">
-                <input type="hidden" class="form-control" name="typeNo" id="typeNo" />
+                <input type="file" class="form-control" name="uploadphoto" id="photo" />
+            </div>  
+            
+            <label class="col-sm-3 control-label" for="startDate">附件修改选择</label>
+            <div class="col-sm-3">
+              	<label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="change" checked>更换
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="keep">保留原附件
+	            </label>
+	            <label class="radio-inline">
+	                <input type="radio" name="photoOption"  value="delete">删除原附件
+	            </label>
             </div>
+            
         </div>
         <div class="form-group">
-        	<div class="col-sm-6">
-                <input type="submit" class="form-control" value="修改" />
+        	<div class="col-sm-6" style="text-align:center">
+                <input type="submit" class="btn btn-default" value="修改" />
             </div>
-            <div class="col-sm-6">
-                <input type="button" class="form-control" value="取消" />
+            <div class="col-sm-6" style="text-align:center">
+                <input type="button" class="btn btn-default" value="取消" />
             </div>
         </div> 
          

@@ -16,6 +16,24 @@ public interface IServiceTypeMapper {
 	 */
 	public void insert(ServiceTypeModel serviceType) throws Exception;
 	/**
+	 * 插入维修类型(带照片)
+	 * @param serviceType 维修类型对象
+	 * @throws Exception
+	 */
+	public void insertWithPhoto(ServiceTypeModel serviceType) throws Exception;
+	/**
+	 * 修改维修类型,有附件信息处理
+	 * @param serviceType 维修类型对象
+	 * @throws Exception
+	 */
+	public void updateWithPhoto(ServiceTypeModel serviceType) throws Exception;
+	/**
+	 * 删除维修类型,有附件信息处理
+	 * @param serviceType 维修类型对象
+	 * @throws Exception
+	 */
+	public void updateForDeletePhoto(ServiceTypeModel serviceType) throws Exception;
+	/**
 	 * 修改维修类型
 	 * @param ServiceType 维修类型对象
 	 * @throws Exception
@@ -29,7 +47,7 @@ public interface IServiceTypeMapper {
 	public void delete(ServiceTypeModel serviceType) throws Exception;
 	/**
 	 * 按维修类型编号查询维修类型数据对象
-	 * @param ServiceType 维修类型编号
+	 * @param typeNo 维修类型编号
 	 * @throws Exception
 	 */
 	public ServiceTypeModel select(int typeNo) throws Exception;
@@ -40,7 +58,7 @@ public interface IServiceTypeMapper {
 	public List<ServiceTypeModel> selectListByAll() throws Exception;
 	/**
 	 * 分页返回所有维修类型数据对象集合
-	 * @param ServiceType 分页条件
+	 * @param rb 分页条件
 	 * @throws Exception
 	 */
 	public List<ServiceTypeModel> selectListByAllWithPage(RowBounds rb) throws Exception;

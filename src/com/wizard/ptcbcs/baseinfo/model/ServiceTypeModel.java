@@ -22,6 +22,18 @@ public class ServiceTypeModel {
 	 */
 	private String typeDesc = null;
 	/**
+	 * 车辆类型的附件
+	 */
+	private byte[] photo=null;
+	/**
+	 * 附件文件名
+	 */
+	private String photoFileName=null;
+	/**
+	 * 附件文件类型
+	 */
+	private String photoContentType=null;
+	/**
 	 * 获取维修类型编号
 	 * @return
 	 */
@@ -62,6 +74,24 @@ public class ServiceTypeModel {
 	 */
 	public void setTypeDesc(String typeDesc) {
 		this.typeDesc = typeDesc;
+	}
+	public byte[] getPhoto() {
+		return photo;
+	}
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+	public String getPhotoFileName() {
+		return photoFileName;
+	}
+	public void setPhotoFileName(String photoFileName) {
+		this.photoFileName = photoFileName;
+	}
+	public String getPhotoContentType() {
+		return photoContentType;
+	}
+	public void setPhotoContentType(String photoContentType) {
+		this.photoContentType = photoContentType;
 	}
 	
 	

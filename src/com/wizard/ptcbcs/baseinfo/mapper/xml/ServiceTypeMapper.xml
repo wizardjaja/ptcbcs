@@ -9,7 +9,11 @@
 		<result property="typeName" column="typeName"/>
 		<result property="typeDesc" column="typeDesc"/>
 	</resultMap>
-	
+	<resultMap id="ServiceTypeWithPhotoResultMap" type="ServiceType" extends="ServiceTypeResultMap" >
+        <result property="photo" column="photo"/>
+        <result property="PHOTOFILENAME" column="photoFileName"/>
+        <result property="PHOTOCONTENTTYPE" column="photoContentType"/>
+     </resultMap>
 	<insert id="insert" parameterType="ServiceType">
 		<selectKey keyProperty="typeNo" resultType="int" order="BEFORE">
 			select SQ_ServiceType.nextval from dual
@@ -17,12 +21,24 @@
 		INSERT INTO ServiceType(typeNo,typeName,typeDesc) 
 		VALUES(#{typeNo},#{typeName},#{typeDesc})
 	</insert>
-	
+	<insert id="insertWithPhoto" parameterType="ServiceType">
+      insert into ServiceType(typeNo, typeName, typeDesc, photo, PHOTOFILENAME, PHOTOCONTENTTYPE) 
+      values(#{typeNo}, #{typeName}, #{typeDesc}, #{photo}, #{photoFileName}, #{photoContentType} )
+  </insert>
 	<update id="update" parameterType="ServiceType">
 		update ServiceType set typeName=#{typeName}, typeDesc=#{typeDesc}
 		where typeNo=#{typeNo} 
 	</update>
-	
+	<update id="updateWithPhoto" parameterType="ServiceType">
+     update ServiceType set typeName=#{typeName}, typeDesc=#{typeDesc},
+      Photo=#{photo},PHOTOFILENAME=#{photoFileName},PHOTOCONTENTTYPE=#{photoContentType}
+      where TYPENO=#{typeNo}
+  </update>
+  <!-- 删除车辆类型信息的附件信息 -->
+   <update id="updateForDeletePhoto" parameterType="ServiceType">
+      update ServiceType set photo=null, PHOTOFILENAME=null, PHOTOCONTENTTYPE=null
+      where TYPENO=#{typeNo}
+  </update>
 	<delete id="delete" parameterType="ServiceType">
 		delete from ServiceType where typeNo=#{typeNo} 
 	</delete>

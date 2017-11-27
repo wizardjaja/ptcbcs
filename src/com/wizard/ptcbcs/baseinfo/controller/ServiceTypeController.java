@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 import com.wizard.ptcbcs.baseinfo.model.ServiceTypeModel;
 import com.wizard.ptcbcs.baseinfo.service.IServiceTypeService;
 import com.wizard.ptcbcs.result.ResultInfo;
@@ -36,16 +38,25 @@ public class ServiceTypeController {
 	}
    /**
     * 增加维修类型
-    * @param busType 维修类型类
+    * @param serviceType 维修类型类
     * @return ResultMessage 消息响应类
     * @throws Exception
     */
    @RequestMapping(value="/add",method=RequestMethod.POST)
-   public ResultMessage add(ServiceTypeModel serviceType) throws Exception
+   public ResultMessage add(ServiceTypeModel serviceType, @RequestPart(required=false) MultipartFile uploadphoto) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("增加维修类型失败");
+	   if(uploadphoto!=null && (!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			
+			serviceType.setPhoto(uploadphoto.getBytes());
+			serviceType.setPhotoFileName(fileName);
+			serviceType.setPhotoContentType(contentType);
+			
+		}
 	   serviceTypeService.add(serviceType);
 	   result.setResult("Y");
 	   result.setMessage("增加维修类型成功");
@@ -60,16 +71,38 @@ public class ServiceTypeController {
 
 /**
  * 修改维修类型
- * @param busType 维修类型类
+ * @param serviceType 维修类型类
  * @return	消息响应类
  * @throws Exception
  */
 @RequestMapping(value="/modify",method=RequestMethod.POST)
-   public ResultMessage modify(ServiceTypeModel serviceType) throws Exception
+   public ResultMessage modify(ServiceTypeModel serviceType, @RequestParam String photoOption,@RequestPart(required=false) MultipartFile uploadphoto) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("修改维修类型失败");
+	   if(photoOption.equals("change")){
+			if(uploadphoto!=null&&(!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			
+			serviceType.setPhoto(uploadphoto.getBytes());
+			serviceType.setPhotoFileName(fileName);
+			serviceType.setPhotoContentType(contentType);
+			serviceTypeService.modifyWithPhoto(serviceType);
+		}
+			else{
+				serviceTypeService.modify(serviceType);
+				serviceTypeService.modifyForDeletePhoto(serviceType);
+			}
+		}
+		else if(photoOption.equals("keep")){
+			serviceTypeService.modify(serviceType);
+		}
+		else{
+			serviceTypeService.modify(serviceType);
+			serviceTypeService.modifyForDeletePhoto(serviceType);
+		}
 	   serviceTypeService.modify(serviceType);
 	   result.setResult("Y");
 	   result.setMessage("修改维修类型成功");
@@ -79,7 +112,7 @@ public class ServiceTypeController {
    }
    /**
     * 删除维修类型
-    * @param busType 维修类型类
+    * @param serviceType 维修类型类
     * @return 消息响应类
     * @throws Exception
     */
@@ -165,6 +198,28 @@ public class ServiceTypeController {
 		return !serviceTypeService.checkNameExist(typeName);
 		
 	}
+	/**
+	 * 下载文件的方法
+	 * @param typeNo
+	 * @return
+	 * @throws Exception
+	 */
+ 	@RequestMapping(value="/downphoto",method=RequestMethod.GET)
+ 	public ResponseEntity<byte[]> downloadPhoto(@RequestParam int typeNo) throws Exception
+ 	{
+ 		ServiceTypeModel serviceType=serviceTypeService.get(typeNo);
+ 		String fileName=new String(serviceType.getPhotoFileName().getBytes("UTF-8"),"iso-8859-1");
+ 		String contentType=serviceType.getPhotoContentType();
+ 	
+ 		String mainType=contentType.substring(0,contentType.indexOf("/"));
+ 		
+ 		String subType=contentType.substring(contentType.indexOf("/")+1);
+ 
+ 		HttpHeaders headers=new HttpHeaders();
+ 		headers.setContentDispositionFormData("attachment", fileName);
+ 		headers.setContentType(new MediaType(mainType,subType));
+ 		return new ResponseEntity<byte[]>(serviceType.getPhoto(),headers,HttpStatus.CREATED);
+ 	}
 	/**
 	 * 导入维修类型的excel文件
 	 * @param importfile excel文件

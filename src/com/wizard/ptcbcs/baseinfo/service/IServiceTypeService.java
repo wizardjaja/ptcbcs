@@ -12,26 +12,38 @@ import com.wizard.ptcbcs.baseinfo.model.ServiceTypeModel;
 public interface IServiceTypeService {
 		/**
 		 * 增加维修类型
-		 * @param busType 维修类型对象
+		 * @param serviceType 维修类型对象
 		 * @throws Exception
 		 */
 		public void add(ServiceTypeModel serviceType) throws Exception;
 		/**
 		 * 修改维修类型
-		 * @param busType 维修类型对象
+		 * @param serviceType 维修类型对象
 		 * @throws Exception
 		 */
 		public void modify(ServiceTypeModel serviceType) throws Exception;
 		/**
+		 * 修改维修类型,有附件信息处理
+		 * @param serviceType 维修类型对象
+		 * @throws Exception
+		 */
+		public void modifyWithPhoto(ServiceTypeModel serviceType) throws Exception;
+		/**
+		 * 删除维修类型,有附件信息处理
+		 * @param serviceType 维修类型对象
+		 * @throws Exception
+		 */
+		public void modifyForDeletePhoto(ServiceTypeModel serviceType) throws Exception;
+		/**
 		 * 删除维修类型
-		 * @param busType 维修类型对象
+		 * @param serviceType 维修类型对象
 		 * @throws Exception
 		 */
 		public void delete(ServiceTypeModel serviceType) throws Exception;
 		/**
 		 * 取得指定维修类型的列表
-		 * @param factoryNo 维修类型编号
-		 * @return 车辆类型对象
+		 * @param typeNo 维修类型编号
+		 * @return 维修类型对象
 		 * @throws Exception
 		 */
 		public ServiceTypeModel get(int typeNo) throws Exception;

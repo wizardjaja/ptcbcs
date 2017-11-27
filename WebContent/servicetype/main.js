@@ -14,7 +14,7 @@ $(function(){
 		mtype:"GET",		
 		colModel: [
 			{ label: '维修类型', name: 'typeName', width: 150 },
-			{ label: '维修描述', name: 'typeDesc', width: 600 },
+			{ label: '维修描述', name: 'typeDesc', width: 600 }
 		],
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		autowidth:true,
@@ -91,6 +91,7 @@ $(function(){
 				$('#servicetypeModal').modal("hide");
 			});
 		});
+		$("div.modal-dialog").css("width","1400px");
 		$('#servicetypeModal').modal("show");
 		
 	});
@@ -149,6 +150,7 @@ $(function(){
 					$('#servicetypeModal').modal("hide");
 				});
 			});
+			$("div.modal-dialog").css("width","1400px");
 			$('#servicetypeModal').modal("show");
 		}
 	});
@@ -195,10 +197,21 @@ $(function(){
 			$("#ModalLabel").html("查看维修类型");
 			$("#modelbody").load("servicetype/view.html",function(){
 				
-				$.getJSON("servicetype/get.mvc",{typeNo:typeNo},function(data1){
-					if(data1!=null){
-						$("div#typeName").html(data1.typeName);
-						$("div#typeDesc").html(data1.typeDesc);
+				$.getJSON("servicetype/get.mvc",{typeNo:typeNo},function(data){
+					if(data!=null){
+						$("input[name='typeName']").val(data.typeName);
+						$("textarea[name='typeDesc']").html(data.typeDesc);
+					}
+					if(data.photoFileName!=null){
+						if(data.photoContentType.indexOf("image")==0){
+							$("div#servicetypePhoto").html("<img src='servicetype/downphoto.mvc?typeNo="+data.typeNo+"'  width='1000'/>");	
+						}
+						else{
+							$("div#servicetypePhoto").html("<a href='servicetype/downphoto.mvc?typeNo="+data.typeNo+"'>下载</a>");
+						}
+					}
+					else{
+						$("div#servicetypePhoto").html("无附件");
 					}
 				});
 				
@@ -207,6 +220,7 @@ $(function(){
 				});
 				
 			});
+			$("div.modal-dialog").css("width","1400px");
 			$('#servicetypeModal').modal("show");
 		}
 	});

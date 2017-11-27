@@ -1,9 +1,9 @@
- <form role="form" class="form-horizontal">
+ <form role="form" role="form"  class="form-horizontal">
     <fieldset>
         <div class="form-group">
             <label class="col-sm-2 control-label" for="typeName">维修类型</label>
-            <div class="col-sm-4" id="typeName">
-                	
+            <div class="col-sm-4">
+                <input type="text" class="form-control" name="typeName" id="typeName" readonly="readonly"/>	
             </div>
             <label class="col-sm-2 control-label"></label>
             <div class="col-sm-4">
@@ -12,13 +12,19 @@
         
         <div class="form-group">
             <label class="col-sm-2 control-label" for="typeDesc">类型描述</label>
-            <div class="col-sm-10" id="typeDesc">
+            <div class="col-sm-10">
+            	<textarea rows="3" cols="150" class="form-control" name="typeDesc" id="typeDesc" readonly="readonly"></textarea>
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label" for="photo">维修类型附件</label>
+            <div class="col-sm-10" class="form-control" id="servicetypePhoto" readonly="readonly">
+            </div>
+         </div> 
+        <div class="form-group">
         	
-            <div class="col-sm-12">
-                <input type="button" class="form-control" value="返回" />
+            <div class="col-sm-12" style="text-align:center">
+                <input type="button" class="btn btn-default" value="返回" />
             </div>
         </div> 
          
