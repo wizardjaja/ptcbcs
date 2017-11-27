@@ -14,7 +14,8 @@ $(function(){
 		mtype:"GET",		
 		colModel: [
 			{ label: '车辆厂家', name: 'factoryName', width: 150 },
-			{ label: '厂家描述', name: 'factoryDesc', width: 600 },
+			{ label: '厂家描述', name: 'factoryDesc', width: 900 },
+			{ label: '厂家地址', name: 'factoryLocation', width: 300 }
 		],
 		viewrecords: true, // show the current page, data rang and total records on the toolbar
 		autowidth:true,
@@ -115,6 +116,7 @@ $(function(){
 						$("input[name='factoryNo']").val(data1.factoryNo);
 						$("input[name='factoryName']").val(data1.factoryName);
 						$("textarea[name='factoryDesc']").val(data1.factoryDesc);
+						$("textarea[name='factoryLocation']").val(data1.factoryLocation);
 					});
 					
 				
@@ -146,6 +148,7 @@ $(function(){
 					$('#busfactoryModal').modal("hide");
 				});
 			});
+			$("div.modal-dialog").css("width","1400px");
 			$('#busfactoryModal').modal("show");
 		}
 	});
@@ -192,10 +195,22 @@ $(function(){
 			$("#ModalLabel").html("查看车辆厂家");
 			$("#modelbody").load("busfactory/view.html",function(){
 				
-				$.getJSON("busfactory/get.mvc",{factoryNo:factoryNo},function(data1){
-					if(data1!=null){
-						$("div#factoryName").html(data1.factoryName);
-						$("div#factoryDesc").html(data1.factoryDesc);
+				$.getJSON("busfactory/get.mvc",{factoryNo:factoryNo},function(data){
+					if(data!=null){
+						$("input[name='factoryName']").val(data.factoryName);
+						$("textarea[name='factoryDesc']").html(data.factoryDesc);
+						$("textarea[name='factoryLocation']").html(data.factoryLocation);
+					}
+					if(data.photoFileName!=null){
+						if(data.photoContentType.indexOf("image")==0){
+							$("div#busfactoryPhoto").html("<img src='busfactory/downphoto.mvc?factoryNo="+data.factoryNo+"'  width='1000'/>");	
+						}
+						else{
+							$("div#busfactoryPhoto").html("<a href='busfactory/downphoto.mvc?factoryNo="+data.factoryNo+"'>下载</a>");
+						}
+					}
+					else{
+						$("div#busfactoryPhoto").html("无附件");
 					}
 				});
 				
@@ -204,6 +219,7 @@ $(function(){
 				});
 				
 			});
+			$("div.modal-dialog").css("width","1400px");
 			$('#busfactoryModal').modal("show");
 		}
 	});

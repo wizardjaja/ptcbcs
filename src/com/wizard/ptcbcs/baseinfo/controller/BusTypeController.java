@@ -205,7 +205,12 @@ public class BusTypeController {
 		
 	}
 	
-	//下载文件的方法
+	/**
+	 * 下载文件的方法
+	 * @param typeNo
+	 * @return
+	 * @throws Exception
+	 */
  	@RequestMapping(value="/downphoto",method=RequestMethod.GET)
  	public ResponseEntity<byte[]> downloadPhoto(@RequestParam int typeNo) throws Exception
  	{

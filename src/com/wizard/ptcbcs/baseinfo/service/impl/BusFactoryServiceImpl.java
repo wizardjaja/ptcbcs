@@ -42,7 +42,17 @@ public class BusFactoryServiceImpl implements IBusFactoryService {
 		// TODO Auto-generated method stub
 		busFactoryMapper.update(busFactory);
 	}
+	
+	@Override
+	public void modifyWithPhoto(BusFactoryModel busFactory) throws Exception {
+		busFactoryMapper.updateWithPhoto(busFactory);
+		
+	}
 
+	@Override
+	public void modifyForDeletePhoto(BusFactoryModel busFactory) throws Exception {
+		busFactoryMapper.updateForDeletePhoto(busFactory);
+	}
 	@Override
 	public void delete(BusFactoryModel busFactory) throws Exception {
 		// TODO Auto-generated method stub

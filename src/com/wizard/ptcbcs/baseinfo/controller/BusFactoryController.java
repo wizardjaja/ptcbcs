@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.wizard.ptcbcs.baseinfo.model.BusFactoryModel;
-import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 import com.wizard.ptcbcs.baseinfo.service.IBusFactoryService;
 import com.wizard.ptcbcs.result.ResultInfo;
 import com.wizard.ptcbcs.result.ResultMessage;
@@ -39,16 +37,28 @@ public class BusFactoryController {
 	}
    /**
     * 增加车辆厂家
-    * @param busType 车辆厂家类
+    * @param busFactory 车辆厂家类
     * @return ResultMessage 消息响应类
     * @throws Exception
     */
    @RequestMapping(value="/add",method=RequestMethod.POST)
-   public ResultMessage add(BusFactoryModel busFactory) throws Exception
+   public ResultMessage add(BusFactoryModel busFactory, @RequestPart(required=false) MultipartFile uploadphoto,HttpSession session) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("增加车辆厂家失败");
+	   if(uploadphoto!=null && (!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			ServletContext application=session.getServletContext();
+			
+			String path=application.getRealPath("/upload/"+fileName);
+			uploadphoto.transferTo(new File(path));
+			busFactory.setPhoto(uploadphoto.getBytes());
+			busFactory.setPhotoFileName(fileName);
+			busFactory.setPhotoContentType(contentType);
+			
+		}
 	   busFactoryService.add(busFactory);
 	   result.setResult("Y");
 	   result.setMessage("增加车辆厂家成功");
@@ -63,16 +73,42 @@ public class BusFactoryController {
 
 /**
  * 修改车辆厂家
- * @param busType 车辆厂家类
+ * @param busFactory 车辆厂家类
  * @return	消息响应类
  * @throws Exception
  */
 @RequestMapping(value="/modify",method=RequestMethod.POST)
-   public ResultMessage modify(BusFactoryModel busFactory) throws Exception
+   public ResultMessage modify(BusFactoryModel busFactory, @RequestParam String photoOption,@RequestPart(required=false) MultipartFile uploadphoto,HttpSession session) throws Exception
    {
 	   ResultMessage result=new ResultMessage();
 	   result.setResult("N");
 	   result.setMessage("修改车辆厂家失败");
+	   if(photoOption.equals("change")){
+			if(uploadphoto!=null&&(!uploadphoto.isEmpty())){
+			String fileName=uploadphoto.getOriginalFilename();
+			String contentType=uploadphoto.getContentType();
+			ServletContext application=session.getServletContext();
+			
+			String path=application.getRealPath("/upload/"+fileName);
+			uploadphoto.transferTo(new File(path));
+			
+			busFactory.setPhoto(uploadphoto.getBytes());
+			busFactory.setPhotoFileName(fileName);
+			busFactory.setPhotoContentType(contentType);
+			busFactoryService.modifyWithPhoto(busFactory);
+		}
+			else{
+				busFactoryService.modify(busFactory);
+				busFactoryService.modifyForDeletePhoto(busFactory);
+			}
+		}
+		else if(photoOption.equals("keep")){
+			busFactoryService.modify(busFactory);
+		}
+		else{
+			busFactoryService.modify(busFactory);
+			busFactoryService.modifyForDeletePhoto(busFactory);
+		}
 	   busFactoryService.modify(busFactory);
 	   result.setResult("Y");
 	   result.setMessage("修改车辆厂家成功");
@@ -82,7 +118,7 @@ public class BusFactoryController {
    }
    /**
     * 删除车辆厂家
-    * @param busType 车辆厂家类
+    * @param busFactory 车辆厂家类
     * @return 消息响应类
     * @throws Exception
     */
@@ -99,7 +135,7 @@ public class BusFactoryController {
    }
    /**
     * 按车辆厂家编号得到车辆厂家对象
-    * @param typeNo 车辆厂家编号
+    * @param factoryNo 车辆厂家编号
     * @return 车辆厂家对象
     * @throws Exception
     */
@@ -139,7 +175,7 @@ public class BusFactoryController {
    }
    	/**
    	 * 检查此车辆厂家能否被删除
-   	 * @param typeNo 车辆厂家编号
+   	 * @param factoryNo 车辆厂家编号
    	 * @return 检查此车辆厂家能否被删除的信息
    	 * @throws Exception
    	 */
@@ -159,7 +195,7 @@ public class BusFactoryController {
 	}
 	/**
 	 * 检查车辆厂家名称是否存在的信息
-	 * @param typeName
+	 * @param factoryName 车辆厂家名字
 	 * @return 检车
 	 * @throws Exception
 	 */
@@ -168,6 +204,28 @@ public class BusFactoryController {
 		return !busFactoryService.checkNameExist(factoryName);
 		
 	}
+	/**
+	 * 下载文件的方法
+	 * @param factoryNo 车辆厂家编号
+	 * @return
+	 * @throws Exception
+	 */
+ 	@RequestMapping(value="/downphoto",method=RequestMethod.GET)
+ 	public ResponseEntity<byte[]> downloadPhoto(@RequestParam int factoryNo) throws Exception
+ 	{
+ 		BusFactoryModel busFactory=busFactoryService.get(factoryNo);
+ 		String fileName=new String(busFactory.getPhotoFileName().getBytes("UTF-8"),"iso-8859-1");
+ 		String contentType=busFactory.getPhotoContentType();
+ 	
+ 		String mainType=contentType.substring(0,contentType.indexOf("/"));
+ 		
+ 		String subType=contentType.substring(contentType.indexOf("/")+1);
+ 
+ 		HttpHeaders headers=new HttpHeaders();
+ 		headers.setContentDispositionFormData("attachment", fileName);
+ 		headers.setContentType(new MediaType(mainType,subType));
+ 		return new ResponseEntity<byte[]>(busFactory.getPhoto(),headers,HttpStatus.CREATED);
+ 	}
 	/**
 	 * 导入车辆厂家的excel文件
 	 * @param importfile excel文件
@@ -210,6 +268,7 @@ public class BusFactoryController {
 		FileInputStream fis = new FileInputStream(exportfilepath);
 		byte[] data = new byte[fis.available()];
 		fis.read(data, 0, data.length);
+		fis.close();
 		HttpHeaders headers=new HttpHeaders();
 		headers.setContentDispositionFormData("attachment", fileName);
 		headers.setContentType(new MediaType(mainType,subType));

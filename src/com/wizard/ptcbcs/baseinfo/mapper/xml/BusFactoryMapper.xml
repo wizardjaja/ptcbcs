@@ -8,20 +8,44 @@
 		<id property="factoryNo" column="factoryNo" />
 		<result property="factoryName" column="factoryName"/>
 		<result property="factoryDesc" column="factoryDesc"/>
+		<result property="factoryLocation" column="factoryLocation"/>
 	</resultMap>
 	
+	<resultMap id="BusFactoryWithPhotoResultMap" type="BusFactory" extends="BusFactoryResultMap" >
+        <result property="photo" column="photo"/>
+        <result property="PHOTOFILENAME" column="photoFileName"/>
+        <result property="PHOTOCONTENTTYPE" column="photoContentType"/>
+     </resultMap>
+     
 	<insert id="insert" parameterType="BusFactory">
 		<selectKey keyProperty="factoryNo" resultType="int" order="BEFORE">
 			select SQ_BusFactory.nextval from dual
 		</selectKey>
-		INSERT INTO BusFactory(factoryNo,factoryName,factoryDesc) 
-		VALUES(#{factoryNo},#{factoryName},#{factoryDesc})
+		INSERT INTO BusFactory(factoryNo,factoryName,factoryDesc,factoryLocation) 
+		VALUES(#{factoryNo},#{factoryName},#{factoryDesc},#{factoryLocation})
 	</insert>
 	
+	<insert id="insertWithPhoto" parameterType="BusFactory">
+      insert into BusFactory(factoryNo, factoryName, factoryDesc, factoryLocation, photo,PHOTOFILENAME,PHOTOCONTENTTYPE) 
+      values(#{factoryNo}, #{factoryName}, #{factoryDesc}, #{factoryLocation}, #{photo}, #{photoFileName}, #{photoContentType} )
+  </insert>
+	
 	<update id="update" parameterType="BusFactory">
-		update BusFactory set factoryName=#{factoryName}, factoryDesc=#{factoryDesc}
+		update BusFactory set factoryName=#{factoryName}, factoryDesc=#{factoryDesc}, factoryLocation=#{factoryLocation}
 		where factoryNo=#{factoryNo} 
 	</update>
+	
+	<update id="updateWithPhoto" parameterType="BusFactory">
+     update BusFactory set factoryName=#{factoryName}, factoryDesc=#{factoryDesc}, factoryLocation=#{factoryLocation},
+      Photo=#{photo},PHOTOFILENAME=#{photoFileName},PHOTOCONTENTTYPE=#{photoContentType}
+      where factoryNo=#{factoryNo}
+	 </update>
+	 <!-- 删除车辆厂家信息的附件信息 -->
+	 <update id="updateForDeletePhoto" parameterType="BusFactory">
+	  update BusFactory set photo=null,PHOTOFILENAME=null,PHOTOCONTENTTYPE=null
+	  where factoryNo=#{factoryNo}
+	  
+	 </update>
 	
 	<delete id="delete" parameterType="BusFactory">
 		delete from BusFactory where factoryNo=#{factoryNo} 

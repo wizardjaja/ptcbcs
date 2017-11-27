@@ -16,6 +16,24 @@ public interface IBusFactoryMapper {
 	 */
 	public void insert(BusFactoryModel busFactory) throws Exception;
 	/**
+	 * 插入车辆厂家(带照片)
+	 * @param busFactory 车辆厂家对象
+	 * @throws Exception
+	 */
+	public void insertWithPhoto(BusFactoryModel busFactory) throws Exception;
+	/**
+	 * 修改车辆厂家,有附件信息处理
+	 * @param busFactory 车辆厂家对象
+	 * @throws Exception
+	 */
+	public void updateWithPhoto(BusFactoryModel busFactory) throws Exception;
+	/**
+	 * 删除车辆厂家,有附件信息处理
+	 * @param busFactory 车辆厂家对象
+	 * @throws Exception
+	 */
+	public void updateForDeletePhoto(BusFactoryModel busFactory) throws Exception;
+	/**
 	 * 修改车辆厂家
 	 * @param busFactory 车辆厂家对象
 	 * @throws Exception

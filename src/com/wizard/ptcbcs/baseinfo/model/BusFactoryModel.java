@@ -18,9 +18,26 @@ public class BusFactoryModel {
 	 */
 	private String factoryName;
 	/**
-	 * 车辆厂家描述
+	 * 厂家描述
 	 */
 	private String factoryDesc;
+	/**
+	 * 厂家地址
+	 */
+	private String factoryLocation;
+	
+	/**
+	 * 车辆厂家的附件
+	 */
+	private byte[] photo=null;
+	/**
+	 * 附件文件名
+	 */
+	private String photoFileName=null;
+	/**
+	 * 附件文件类型
+	 */
+	private String photoContentType=null;
 	/**
 	 * 获取车辆厂家编号
 	 * @return
@@ -62,6 +79,30 @@ public class BusFactoryModel {
 	 */
 	public void setFactoryDesc(String factoryDesc) {
 		this.factoryDesc = factoryDesc;
+	}
+	public String getFactoryLocation() {
+		return factoryLocation;
+	}
+	public void setFactoryLocation(String factoryLocation) {
+		this.factoryLocation = factoryLocation;
+	}
+	public byte[] getPhoto() {
+		return photo;
+	}
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+	public String getPhotoFileName() {
+		return photoFileName;
+	}
+	public void setPhotoFileName(String photoFileName) {
+		this.photoFileName = photoFileName;
+	}
+	public String getPhotoContentType() {
+		return photoContentType;
+	}
+	public void setPhotoContentType(String photoContentType) {
+		this.photoContentType = photoContentType;
 	}
 	
 

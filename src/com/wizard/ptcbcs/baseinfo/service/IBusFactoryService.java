@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import com.wizard.ptcbcs.baseinfo.model.BusFactoryModel;
-import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
+import com.wizard.ptcbcs.baseinfo.model.BusFactoryModel;
 /**
  * 车辆厂家service类
  * @author wizard
@@ -14,26 +14,38 @@ import com.wizard.ptcbcs.baseinfo.model.BusTypeModel;
 public interface IBusFactoryService {
 		/**
 		 * 增加车辆厂家
-		 * @param busType 车辆厂家对象
+		 * @param busFactory 车辆厂家对象
 		 * @throws Exception
 		 */
 		public void add(BusFactoryModel busFactory) throws Exception;
 		/**
 		 * 修改车辆厂家
-		 * @param busType 车辆厂家对象
+		 * @param busFactory 车辆厂家对象
 		 * @throws Exception
 		 */
 		public void modify(BusFactoryModel busFactory) throws Exception;
 		/**
+		 * 修改车辆厂家,有附件信息处理
+		 * @param busFactory 车辆厂家对象
+		 * @throws Exception
+		 */
+		public void modifyWithPhoto(BusFactoryModel busFactory) throws Exception;
+		/**
+		 * 删除车辆厂家,有附件信息处理
+		 * @param busFactory 车辆厂家对象
+		 * @throws Exception
+		 */
+		public void modifyForDeletePhoto(BusFactoryModel busFactory) throws Exception;
+		/**
 		 * 删除车辆厂家
-		 * @param busType 车辆厂家对象
+		 * @param busFactory 车辆厂家对象
 		 * @throws Exception
 		 */
 		public void delete(BusFactoryModel busFactory) throws Exception;
 		/**
 		 * 取得指定车辆厂家的列表
 		 * @param factoryNo 车辆厂家编号
-		 * @return 车辆类型对象
+		 * @return 车辆厂家对象
 		 * @throws Exception
 		 */
 		public BusFactoryModel get(int factoryNo) throws Exception;

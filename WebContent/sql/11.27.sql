@@ -1,0 +1,24 @@
+alter table bus add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSDAYINFO add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSDRIVER add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSFACTORY add (factoryLocation varchar2(500), photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSILLEGALFEE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSLABORCOST add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSOILINFO add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSSERVICEINFO add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSSERVICEINFODETAIL add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table BUSTYPE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table ILLEGALTYPE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table LABORCOSTTYPE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table PAYTYPE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table SERVICEPROVIDER add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+alter table SERVICETYPE add (photo blob default null, photofilename VARCHAR2(200) default null, PHOTOCONTENTTYPE VARCHAR2(500) default null);
+
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (32,'宇通客车','郑州宇通客车股份有限公司，其前身是郑州客车厂，是一家集客车产品研发、制造与销售为一体的大型现代化制造企业，宇通连续14年[1-2]  蝉联中国大中型客车销售冠军[1-2]  ，销量保持世界第一[1-2]  ，位于郑州东区国际物流园区的宇通客车新能源厂区占地2000余亩，建筑面积达60万平方米，将具备年产30000台的生产能力，为中国客车行业最为先进、世界规模最大的新能源客车基地。',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (33,'厦门金龙','厦门金龙汽车集团股份有限公司以大、中、轻型客车的制造与销售为主导产业，旗下拥有厦门金龙联合汽车工业有限公司、厦门金龙旅行车有限公司、金龙联合汽车工业(苏州)有限公司等客车整车制造企业以及金龙汽车车身、空调、橡塑、电器、座椅等汽车零部件生产企业，主要产品“金龙客车”、“金旅客车”和“海格客车”是中国客车行业三大品牌，均为“中国名牌产品”，“KING LONG”商标为中国驰名商标，金龙产品被授予国家出口商品免验资格，集团技术中心被认定为国家级技术中心等。',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (35,'中通客车','中通客车是国内第三大客车生产企业，仅次于宇通客车和金龙汽车。[1]  于2000年1月13日在深圳证券交易所成功上市，是中国客车行业最早的上市公司之一。[2]  中通客车获得了中国商标领域的最高荣誉，成为行业内第三家经过行政认定获得“中国驰名商标”的客车生产企业。',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (36,'海格客车','金龙联合汽车工业（苏州）有限公司现拥有总资产25亿元，员工3280人，其中各类专业技术人员1100多人，具有年产22000台大中型客车及底盘的能力，下辖博士后科研工作站、江苏省级企业技术中心、新型高速客车研发中心、园区现代化客车生产基地。苏州金龙获得TS16949、3C认证，拥有50多类300多个品种，海格H系、A系、V系、W系、B系及星系客车产品，覆盖客运、旅游、公交和团体用车领域。海格客车不仅畅销国内，还驰行东南亚、中东、非洲、俄罗斯、东欧等地',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (37,'金旅客车','厦门金龙旅行车有限公司是厦门金龙汽车集团股份有限公司与香港嘉隆（集团）有限公司合资兴办的中外合资企业，成立于1992年，主要从事中高档豪华客车的研发、生产和销售，公司产品“金旅客车”是中国名牌产品。公司总占地面积约35万平方米，总建筑面积16万平方米，员工1800余人，具备年产大、中型客车1.5万辆、轻型客车2.5万辆的能力，产品有9大系列近400个品种，车辆长度涵盖4.8米至12米，座位数涵盖5座至55座，是国内众多客车制造商中产品系列最为齐全的企业之一，且拥有多项自主知识产权，在客车全承载技术、安全、环保节能领域处于国内领先水平。',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (38,'安凯客车','安徽安凯汽车股份有限公司是国家定点生产高、中档，大、中型豪华客车及客车底盘的大型企业。公司于1997年7月22日成立，他的前身是合肥客车制造厂，还生产了HFF670前置柴油铰接、HFF650前置柴油单机客车，成立于1987年7月28日。',null,null,null);
+Insert into BUSFACTORY (FACTORYNO,FACTORYNAME,FACTORYDESC,PHOTOFILENAME,PHOTOCONTENTTYPE,FACTORYLOCATION) values (39,'福田欧辉','福田欧辉客车系北汽福田汽车股份有限公司于2003年9月16日成立的一个专门致力于研发、生产制造、销售大中型客车及底盘的SBU型事业部。',null,null,null);
+commit;
